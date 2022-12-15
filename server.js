@@ -2,6 +2,7 @@ const express  =  require('express')
 const mongooseConnection = require('./config/database')
 const cors = require('cors')
 const productRouter = require('./routes/products')
+const BookmarkRouter = require('./routes/bookmark')
 require('dotenv').config()
 const app = express()
 
@@ -13,7 +14,7 @@ app.get('/',(req,res)=>{
     res.send("Welcome Home")
 })
 
-
+app.use('/bookmark',BookmarkRouter)
 app.use('/product',productRouter)
 
 app.listen(process.env.PORT || 8081, async(req,res)=>{
