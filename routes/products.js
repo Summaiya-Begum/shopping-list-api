@@ -4,9 +4,23 @@ const ProductModel = require("../models/productSchema");
 const productRouter = Router();
 
 productRouter.get("/", async (req, res) => {
+  const query = req.query
+  console.log(query.q)
+  if(query){
+    if(query.q=='asc'){
+      const result = await ProductModel.find().sort({createdAt: 1})
+      return res.send(result)
+    }else{
+      const result = await ProductModel.find().sort({createdAt: -1})
+      return res.send(result)
+    }
+  }
   const product = await ProductModel.find();
   res.send({ msg: "Welcome Product Home Page", product });
+
 });
+
+
 productRouter.post("/create", async (req, res) => {
   const { title, quantity, priority, description } = req.body;
   try {
@@ -35,12 +49,12 @@ productRouter.patch("/edit/:id", async(req, res) => {
 
 });
 
-
 // Product DELETE CRUD
 productRouter.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
   await ProductModel.findByIdAndDelete({ _id: id });
   res.send({ msg: "Product Deleted Successfully" });
 });
+
 
 module.exports = productRouter;
